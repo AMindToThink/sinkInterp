@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 import numpy as np
 from sklearn.linear_model import LinearRegression
-
+#%%
 tokenizer = AutoTokenizer.from_pretrained("openai/gpt-oss-20b")
 model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b", device_map='cpu', torch_dtype=torch.bfloat16)
 #%%
