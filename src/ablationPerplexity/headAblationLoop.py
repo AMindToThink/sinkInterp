@@ -52,10 +52,8 @@ model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b").to("cuda")
 JSON_FILE_PATH = "head_ablation_results.json"
 NUM_LAYERS = len(model.model.layers)  # Adjust based on your model
 assert NUM_LAYERS == 24
-assert model.model.layers[0].self_attn._parameters["sinks"].shape == torch.Size([64])
-NUM_HEADS = (
-    model.model.layers[0].self_attn._parameters["sinks"].shape[0]
-)  # Adjust based on your model
+assert model.model.layers[0].self_attn.sinks.shape == torch.Size([64])
+NUM_HEADS = model.model.layers[0].self_attn.sinks.shape[0]  # Adjust based on your model
 assert NUM_HEADS == 64
 
 # Load existing results

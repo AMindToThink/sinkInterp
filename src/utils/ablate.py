@@ -24,7 +24,7 @@ def get_sink(model, layer, head):
             f"Layer {layer}.self_attn._parameters does not contain 'sinks' key"
         )
 
-    sinks = layer_obj.self_attn._parameters["sinks"]
+    sinks = layer_obj.self_attn.sinks
     if head >= len(sinks):
         raise IndexError(
             f"Head {head} does not exist. Layer {layer} has {len(sinks)} heads."
