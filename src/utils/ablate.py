@@ -53,7 +53,9 @@ def ablate_head(model, layer, head):
     try:
         with torch.no_grad():
             # Create infinity tensor with same shape/device/dtype as original
-            inf_value = torch.full_like(original_value, float("inf"))
+            inf_value = torch.full_like(
+                original_value, 100000000
+            )  # Can't be actual inf because that results in nan values.
             sink_params[head] = inf_value
         yield
 
