@@ -7,6 +7,8 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from utils import perplexity
+import torch
+torch.cuda.empty_cache()
 
 # %%
 input_texts = datasets.load_dataset("wikitext", "wikitext-2-raw-v1", split="test")[
