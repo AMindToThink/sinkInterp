@@ -238,5 +238,57 @@ with open("sink_vs_norms_data.json", "w") as f:
 
 print(f"\nAnalysis complete! Plot saved as 'sink_vs_matrix_norms.png'")
 print(f"Raw data saved as 'sink_vs_norms_data.json'")
+# %%
+# Statistical significance test for correlation between sink values and expected norm
+from scipy.stats import pearsonr
+import scipy.stats as stats
+
+# Perform Pearson correlation test with p-value
+correlation_coeff, p_value = pearsonr(sink_values, expected_norms)
+
+# One-tailed t-test for positive correlation
+# H0: r <= 0 (negative or zero correlation)
+# H1: r > 0 (positive correlation)
+n = len(sink_values)
+t_statistic = correlation_coeff * np.sqrt((n - 2) / (1 - correlation_coeff**2))
+df = n - 2
+
+# One-tailed p-value (testing for positive correlation)
+p_value_one_tailed = 1 - stats.t.cdf(t_statistic, df)
+
+print(f"\n--- Statistical Test for Sink vs Expected Norm Correlation ---")
+print(f"Correlation coefficient: {correlation_coeff:.6f}")
+print(f"Sample size: {n}")
+print(f"Degrees of freedom: {df}")
+print(f"T-statistic: {t_statistic:.6f}")
+print(f"One-tailed p-value (H1: r > 0): {p_value_one_tailed:.6e}")
+print(f"Two-tailed p-value: {p_value:.6e}")
+
+# Interpret results
+alpha = 0.05
+if p_value_one_tailed < alpha:
+    print(f"\nResult: SIGNIFICANT at α = {alpha}")
+    print("We reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is significant evidence of a positive correlation between sink values and expected norm."
+    )
+else:
+    print(f"\nResult: NOT SIGNIFICANT at α = {alpha}")
+    print("We fail to reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is insufficient evidence of a positive correlation between sink values and expected norm."
+    )
+
+# Effect size interpretation
+if abs(correlation_coeff) < 0.1:
+    effect_size = "negligible"
+elif abs(correlation_coeff) < 0.3:
+    effect_size = "small"
+elif abs(correlation_coeff) < 0.5:
+    effect_size = "medium"
+else:
+    effect_size = "large"
+
+print(f"Effect size: {effect_size} correlation")
 
 # %%
