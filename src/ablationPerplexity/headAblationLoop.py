@@ -45,6 +45,12 @@ def save_results_dict(json_file_path, results_dict):
         json.dump(results_dict, f, indent=2)
 
 
+# Load existing results
+results = load_results_dict(JSON_FILE_PATH)
+# Get list of all untested pairs and shuffle them
+untested_pairs = list(get_untested_pairs(NUM_LAYERS, NUM_HEADS, results))
+random.shuffle(untested_pairs)
+print(f"Found {len(untested_pairs)} completed experiments")
 # %%
 model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b").to("cuda")
 # %%
@@ -58,9 +64,6 @@ NUM_HEADS = (
 )  # Adjust based on your model
 assert NUM_HEADS == 64
 
-# Load existing results
-results = load_results_dict(JSON_FILE_PATH)
-print(f"Found {len(results)} completed experiments")
 
 # %%
 input_texts = datasets.load_dataset("wikitext", "wikitext-2-raw-v1", split="test")[
@@ -70,9 +73,7 @@ input_texts = [s for s in input_texts if s != ""][:50]
 
 tokenizer = AutoTokenizer.from_pretrained("openai/gpt-oss-20b")
 # %%
-# Get list of all untested pairs and shuffle them
-untested_pairs = list(get_untested_pairs(NUM_LAYERS, NUM_HEADS, results))
-random.shuffle(untested_pairs)
+
 
 if not untested_pairs:
     print("All experiments completed!")
@@ -85,7 +86,7 @@ else:
 
         with ablate.ablate_head(model, layer, head):
             ppl_results = perplexity.Perplexity().compute(
-                model=model, tokenizer=tokenizer, predictions=input_texts, batch_size=32
+                model=model, tokenizer=tokenizer, predictions=input_texts, batch_size=64
             )
 
         # Store results in multi-level dictionary
