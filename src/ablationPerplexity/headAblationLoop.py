@@ -26,7 +26,7 @@ def get_next_experiment_pair(num_layers, num_heads, results_dict):
     Returns None if all pairs have been tested.
     """
     all_pairs = product(range(num_layers), range(num_heads))
-    untested_pairs = [pair for pair in all_pairs if f"{pair[0]},{pair[1]}" not in results_dict]
+    untested_pairs = [pair for pair in all_pairs if (pair[0], pair[1]) not in results_dict]
     
     if not untested_pairs:
         return None
@@ -43,7 +43,7 @@ def save_results_dict(json_file_path, results_dict):
 # %%
 # Configuration
 JSON_FILE_PATH = "head_ablation_results.json"
-NUM_LAYERS = 48  # Adjust based on your model
+NUM_LAYERS = 24  # Adjust based on your model
 NUM_HEADS = 64   # Adjust based on your model
 
 # Load existing results

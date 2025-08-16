@@ -18,7 +18,7 @@ input_texts = [s for s in input_texts if s != ""][:50]
 
 tokenizer = AutoTokenizer.from_pretrained("openai/gpt-oss-20b")
 # %%
-model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b").to("cuda")
+model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b", torch_dtype=torch.bfloat16).to("cuda")
 # %%
 results = perplexity.Perplexity().compute(
     model=model,
