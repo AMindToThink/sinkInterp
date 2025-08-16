@@ -85,9 +85,7 @@ else:
 
         with ablate.ablate_head(model, layer, head):
             ppl_results = perplexity.Perplexity().compute(
-                model=model,
-                tokenizer=tokenizer,
-                predictions=input_texts,
+                model=model, tokenizer=tokenizer, predictions=input_texts, batch_size=32
             )
 
         # Store results in multi-level dictionary
