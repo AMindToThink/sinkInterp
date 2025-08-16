@@ -46,9 +46,7 @@ def save_results_dict(json_file_path, results_dict):
 
 
 # %%
-model = AutoModelForCausalLM.from_pretrained(
-    "openai/gpt-oss-20b", dtype=torch.bfloat16
-).to("cuda")
+model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b").to("cuda")
 # %%
 # Configuration
 JSON_FILE_PATH = "head_ablation_results.json"
