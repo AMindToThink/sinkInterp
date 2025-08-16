@@ -45,12 +45,6 @@ def save_results_dict(json_file_path, results_dict):
         json.dump(results_dict, f, indent=2)
 
 
-# Load existing results
-results = load_results_dict(JSON_FILE_PATH)
-# Get list of all untested pairs and shuffle them
-untested_pairs = list(get_untested_pairs(NUM_LAYERS, NUM_HEADS, results))
-random.shuffle(untested_pairs)
-print(f"Found {len(untested_pairs)} completed experiments")
 # %%
 model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b").to("cuda")
 # %%
@@ -64,7 +58,12 @@ NUM_HEADS = (
 )  # Adjust based on your model
 assert NUM_HEADS == 64
 
-
+# Load existing results
+results = load_results_dict(JSON_FILE_PATH)
+# Get list of all untested pairs and shuffle them
+untested_pairs = list(get_untested_pairs(NUM_LAYERS, NUM_HEADS, results))
+random.shuffle(untested_pairs)
+print(f"Found {len(untested_pairs)} completed experiments")
 # %%
 input_texts = datasets.load_dataset("wikitext", "wikitext-2-raw-v1", split="test")[
     "text"
