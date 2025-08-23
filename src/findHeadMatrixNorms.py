@@ -6,14 +6,15 @@ from itertools import product
 from utils import attention_info
 from tqdm import tqdm
 
-model = AutoModelForCausalLM.from_pretrained("openai/gpt-oss-20b")
+model = AutoModelForCausalLM.from_pretrained(
+    "openai/gpt-oss-120b", low_cpu_mem_usage=True
+)
 # %%
 # Configuration
 NUM_LAYERS = len(model.model.layers)  # Adjust based on your model
-assert NUM_LAYERS == 24
-assert model.model.layers[0].self_attn.sinks.shape == torch.Size([64])
 NUM_HEADS = model.model.layers[0].self_attn.sinks.shape[0]  # Adjust based on your model
-assert NUM_HEADS == 64
+print(f"Num layers: ", NUM_LAYERS)
+print("Num heads: ", NUM_HEADS)
 # %%
 results_dict = {}
 for layer in range(NUM_LAYERS):
