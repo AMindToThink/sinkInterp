@@ -44,6 +44,7 @@ def get_head_projections(model, layer_idx, head_idx):
         "kv_head_idx": kv_head_idx,
         "q_slice": (q_start, q_end),
         "kv_slice": (kv_start, kv_end),
+        "sink": attention.sinks[head_idx],
     }
 
     # Add bias if it exists

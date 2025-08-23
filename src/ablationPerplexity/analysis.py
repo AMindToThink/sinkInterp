@@ -3,6 +3,7 @@ import os
 import random
 import sys
 import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -40,23 +41,27 @@ NUM_HEADS = 64
 NUM_LAYERS = 24
 
 # Extract layer 5 results for plotting
-layer_5_sink = []
+sink_values = []
 layer_5_perplexity = []
 
-for i in range(1, 24, 2):
+all_range = range(24)
+layer_5_range = [5]
+even_range = range(0, 24, 2)
+odd_range = range(1, 24, 2)
+for i in all_range:  # Change this to determine which layers to consider
     for head_idx, head_data in results[str(i)].items():
         if (
             isinstance(head_data, dict)
             and "sink" in head_data
             and "mean_perplexity" in head_data["perplexities"]
         ):
-            layer_5_sink.append(head_data["sink"])
+            sink_values.append(head_data["sink"])
             layer_5_perplexity.append(head_data["perplexities"]["mean_perplexity"])
 
 
 # Create the plot
 plt.figure(figsize=(10, 6))
-plt.scatter(layer_5_sink, layer_5_perplexity, alpha=0.7)
+plt.scatter(sink_values, layer_5_perplexity, alpha=0.7)
 plt.xlabel("Sink")
 plt.ylabel("Mean Perplexity")
 plt.title("Window Layers: Sink vs Mean Perplexity")
@@ -64,4 +69,12 @@ plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 
-print(f"Plotted {len(layer_5_sink)} data points from layer 5")
+# Calculate correlation coefficient and p-value
+if len(sink_values) > 1:
+    correlation_coeff, p_value = pearsonr(sink_values, layer_5_perplexity)
+    print(f"Plotted {len(sink_values)} data points from window layers")
+    print(f"Correlation coefficient (R): {correlation_coeff:.6f}")
+    print(f"P-value: {p_value:.6f}")
+else:
+    print(f"Plotted {len(sink_values)} data points from window layers")
+    print("Not enough data points to calculate correlation")
