@@ -42,7 +42,7 @@ NUM_LAYERS = 24
 
 # Extract layer 5 results for plotting
 sink_values = []
-layer_5_perplexity = []
+perplexity_list = []
 
 all_range = range(24)
 layer_5_range = [5]
@@ -56,22 +56,22 @@ for i in all_range:  # Change this to determine which layers to consider
             and "mean_perplexity" in head_data["perplexities"]
         ):
             sink_values.append(head_data["sink"])
-            layer_5_perplexity.append(head_data["perplexities"]["mean_perplexity"])
+            perplexity_list.append(head_data["perplexities"]["mean_perplexity"])
 
 
 # Create the plot
 plt.figure(figsize=(10, 6))
-plt.scatter(sink_values, layer_5_perplexity, alpha=0.7)
+plt.scatter(sink_values, perplexity_list, alpha=0.7)
 plt.xlabel("Sink")
 plt.ylabel("Mean Perplexity")
-plt.title("Window Layers: Sink vs Mean Perplexity")
+plt.title("Sink vs Mean Perplexity")
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 
 # Calculate correlation coefficient and p-value
 if len(sink_values) > 1:
-    correlation_coeff, p_value = pearsonr(sink_values, layer_5_perplexity)
+    correlation_coeff, p_value = pearsonr(sink_values, perplexity_list)
     print(f"Plotted {len(sink_values)} data points from window layers")
     print(f"Correlation coefficient (R): {correlation_coeff:.6f}")
     print(f"P-value: {p_value:.6f}")
