@@ -388,3 +388,99 @@ else:
 print(f"Effect size: {effect_size_spec} correlation")
 
 # %%
+# Statistical significance test for correlation between sink values and Log Frobenius norm
+print(f"\n--- Statistical Test for Sink vs Log Frobenius Norm Correlation ---")
+
+# Perform Pearson correlation test with p-value
+correlation_coeff_log_fro, p_value_log_fro = pearsonr(sink_values, log_fro_norms)
+
+# One-tailed t-test for positive correlation
+t_statistic_log_fro = correlation_coeff_log_fro * np.sqrt(
+    (n - 2) / (1 - correlation_coeff_log_fro**2)
+)
+
+# One-tailed p-value (testing for positive correlation)
+p_value_one_tailed_log_fro = 1 - stats.t.cdf(t_statistic_log_fro, df)
+
+print(f"Correlation coefficient: {correlation_coeff_log_fro:.6f}")
+print(f"Sample size: {n}")
+print(f"Degrees of freedom: {df}")
+print(f"T-statistic: {t_statistic_log_fro:.6f}")
+print(f"One-tailed p-value (H1: r > 0): {p_value_one_tailed_log_fro:.6e}")
+print(f"Two-tailed p-value: {p_value_log_fro:.6e}")
+
+# Interpret results
+if p_value_one_tailed_log_fro < alpha:
+    print(f"\nResult: SIGNIFICANT at α = {alpha}")
+    print("We reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is significant evidence of a positive correlation between sink values and log Frobenius norm."
+    )
+else:
+    print(f"\nResult: NOT SIGNIFICANT at α = {alpha}")
+    print("We fail to reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is insufficient evidence of a positive correlation between sink values and log Frobenius norm."
+    )
+
+# Effect size interpretation
+if abs(correlation_coeff_log_fro) < 0.1:
+    effect_size_log_fro = "negligible"
+elif abs(correlation_coeff_log_fro) < 0.3:
+    effect_size_log_fro = "small"
+elif abs(correlation_coeff_log_fro) < 0.5:
+    effect_size_log_fro = "medium"
+else:
+    effect_size_log_fro = "large"
+
+print(f"Effect size: {effect_size_log_fro} correlation")
+
+# %%
+# Statistical significance test for correlation between sink values and Log Spectral norm
+print(f"\n--- Statistical Test for Sink vs Log Spectral Norm Correlation ---")
+
+# Perform Pearson correlation test with p-value
+correlation_coeff_log_spec, p_value_log_spec = pearsonr(sink_values, log_spectral_norms)
+
+# One-tailed t-test for positive correlation
+t_statistic_log_spec = correlation_coeff_log_spec * np.sqrt(
+    (n - 2) / (1 - correlation_coeff_log_spec**2)
+)
+
+# One-tailed p-value (testing for positive correlation)
+p_value_one_tailed_log_spec = 1 - stats.t.cdf(t_statistic_log_spec, df)
+
+print(f"Correlation coefficient: {correlation_coeff_log_spec:.6f}")
+print(f"Sample size: {n}")
+print(f"Degrees of freedom: {df}")
+print(f"T-statistic: {t_statistic_log_spec:.6f}")
+print(f"One-tailed p-value (H1: r > 0): {p_value_one_tailed_log_spec:.6e}")
+print(f"Two-tailed p-value: {p_value_log_spec:.6e}")
+
+# Interpret results
+if p_value_one_tailed_log_spec < alpha:
+    print(f"\nResult: SIGNIFICANT at α = {alpha}")
+    print("We reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is significant evidence of a positive correlation between sink values and log spectral norm."
+    )
+else:
+    print(f"\nResult: NOT SIGNIFICANT at α = {alpha}")
+    print("We fail to reject the null hypothesis (H0: r ≤ 0)")
+    print(
+        "There is insufficient evidence of a positive correlation between sink values and log spectral norm."
+    )
+
+# Effect size interpretation
+if abs(correlation_coeff_log_spec) < 0.1:
+    effect_size_log_spec = "negligible"
+elif abs(correlation_coeff_log_spec) < 0.3:
+    effect_size_log_spec = "small"
+elif abs(correlation_coeff_log_spec) < 0.5:
+    effect_size_log_spec = "medium"
+else:
+    effect_size_log_spec = "large"
+
+print(f"Effect size: {effect_size_log_spec} correlation")
+
+# %%
